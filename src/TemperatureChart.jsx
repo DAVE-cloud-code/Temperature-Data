@@ -38,6 +38,9 @@ const TemperatureChart = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
+  const geoApiKey = import.meta.env.VITE_GEOAPIFY_API_KEY;
+  const rapidApiKey = import.meta.env.VITE_RAPIDAPI_KEY;
+
   useEffect(() => {
     const today = new Date();
     const thirtyDaysAgo = new Date();
@@ -72,7 +75,7 @@ const TemperatureChart = () => {
     setError(null);
     try {
       const geoResponse = await fetch(
-        `https://api.geoapify.com/v1/geocode/search?text=${city}&apiKey=49307aec154f434db7bbbd73e609f526`
+        `https://api.geoapify.com/v1/geocode/search?text=${city}&apiKey=${geoApiKey}`
       );
       const geoData = await geoResponse.json();
 
@@ -96,8 +99,7 @@ const TemperatureChart = () => {
         {
           method: "GET",
           headers: {
-            "X-RapidAPI-Key":
-              "a3b5927ab6msha3a401cf77525e5p1aad6djsn0adf0a8a5054",
+            "X-RapidAPI-Key": rapidApiKey,
             "X-RapidAPI-Host": "meteostat.p.rapidapi.com",
           },
         }
@@ -173,26 +175,11 @@ const TemperatureChart = () => {
   };
 
   return (
-    <Container
-      maxWidth="lg"
-      sx={{
-        py: 4,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        width: "100vw",
-      }}
-    >
+    <Container maxWidth="md" sx={{ py: 4 , width:'100vw'}}>
       <Typography variant="h4" align="center" gutterBottom>
         Temperature Data
       </Typography>
-      <Box
-        width="100%"
-        display="flex"
-        flexDirection="column"
-        gap={3}
-        alignItems="center"
-      >
+      <Box display="flex" flexDirection="column" gap={3} alignItems="center">
         <TextField
           label="Enter a city"
           variant="outlined"
@@ -244,10 +231,11 @@ const TemperatureChart = () => {
           sx={{
             mt: 4,
             p: 3,
-            width: "90%",
             bgcolor: "background.paper",
             borderRadius: 2,
             boxShadow: 3,
+            width: "100%",
+            maxWidth: "100%",
           }}
         >
           <Line data={chartData} options={options} />
